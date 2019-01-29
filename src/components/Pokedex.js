@@ -8,6 +8,7 @@ class Pokedex extends React.Component {
     super(props);
     this.state = {
       pokemonArray: [],
+      filteredArray: [],
     }
   }
 
@@ -17,16 +18,24 @@ class Pokedex extends React.Component {
         return response.json();
       })
       .then((res) => {
-        this.setState({pokemonArray: res.results});
+        this.setState({pokemonArray: res.results, filteredArray: res.results});
         console.log(res.results)
       })
+  }
+
+  filterInput = (e) => {
+    console.log(e.target.value);
+    let arr = this.state.pokemonArray.filter((pokemon) => {
+      return pokemon.name.includes(e.target.value)
+    });
+    this.setState({filteredArray: arr});
   }
 
   render() {
     return (
       <div>
-        <PokeFilter />
-        <Pokemon pokemonArray={this.state.pokemonArray}/>
+        <PokeFilter filterInput={this.filterInput} />
+        <Pokemon pokemonArray={this.state.filteredArray}/>
       </div>
     )
   }
